@@ -26,6 +26,8 @@ static int opt_ignore_aspect = 0;
 
 void setup_console(int t)
 {
+	return;
+
 	struct termios our_termios;
 	static struct termios old_termios;
 
@@ -307,7 +309,7 @@ identified:
 			FD_ZERO(&fds);
 			FD_SET(0, &fds);
 
-			if(select(1, &fds, NULL, NULL, &tv) <= 0)
+			if(usleep(tv.tv_sec * 1000000 + tv.tv_usec) <= 0)
 			{
 				ret = 1;
 				break;
@@ -315,7 +317,7 @@ identified:
 			delay = 0;
 		}
 
-		c = getchar();
+		/*c = getchar();
 		switch(c)
 		{
 			case EOF:
@@ -394,7 +396,8 @@ identified:
 					transform_rotation -= 4;
 				retransform = 1;
 				break;
-		}
+		}*/
+		break;
 	}// while(1)
 
 done:
@@ -546,7 +549,7 @@ int main(int argc, char **argv)
 		if(r == 0)
 			break;
 		i += r;
-		if(i < optind)
+		if(i < optind || (i >= argc && argc > optind + 1))
 			i = optind;
 	}
 
